@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BioHealth - Apotek Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blue-deep:   #2563a8;
+    --blue-mid:    #4a90d9;
+    --blue-soft:   #7bb8f0;
+    --blue-pale:   #c8e2fa;
+    --blue-mist:   #e8f4ff;
+    --cream:       #fdf6ec;
+    --cream-warm:  #f5e9d3;
+    --cream-border:#e8d8c0;
+    --accent-mint: #6dd6c2;
+    --accent-coral:#ff8c78;
+    --accent-lemon:#ffd97d;
+    --text-dark:   #1a3a5c;
+    --text-mid:    #3a6a9a;
+    --text-light:  #7aaac8;
+    --white:       #ffffff;
+    --shadow-sm:   0 2px 12px rgba(37,99,168,0.10);
+    --shadow-md:   0 6px 28px rgba(37,99,168,0.15);
+    --shadow-lg:   0 12px 48px rgba(37,99,168,0.20);
+    --radius-sm:   12px;
+    --radius-md:   20px;
+    --radius-lg:   32px;
+    --radius-xl:   48px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ========== SCROLLBAR ========== */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--blue-mist); }
+  ::-webkit-scrollbar-thumb { background: var(--blue-soft); border-radius: 99px; }
+
+  /* ========== BLOB BG ========== */
+  .blob-bg {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden;
+  }
+  .blob-bg span {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+    animation: blobFloat 8s ease-in-out infinite alternate;
+  }
+  .blob-bg span:nth-child(1) { width:520px;height:520px;background:var(--blue-soft);top:-120px;left:-120px; animation-delay:0s; }
+  .blob-bg span:nth-child(2) { width:380px;height:380px;background:var(--accent-mint);top:30%;right:-100px; animation-delay:2s; }
+  .blob-bg span:nth-child(3) { width:300px;height:300px;background:var(--accent-lemon);bottom:10%;left:20%; animation-delay:4s; }
+  .blob-bg span:nth-child(4) { width:260px;height:260px;background:var(--blue-pale);bottom:-80px;right:30%; animation-delay:1s; }
+
+  @keyframes blobFloat {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(30px,20px) scale(1.08); }
+  }
+
+  /* ========== HEADER ========== */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1.5px solid rgba(200,226,250,0.6);
+    padding: 0 2rem;
+    box-shadow: 0 4px 24px rgba(37,99,168,0.08);
+  }
+
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px; gap: 1rem;
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+  }
+  .logo-icon {
+    width: 44px; height: 44px; background: linear-gradient(135deg,var(--blue-mid),var(--blue-deep));
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(37,99,168,0.30);
+    position: relative; overflow: hidden;
+  }
+  .logo-icon::after {
+    content: '+';
+    font-size: 28px; font-weight: 900; color: white; line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.5rem; color: var(--blue-deep);
+    letter-spacing: -0.5px;
+  }
+  .logo-text span { color: var(--accent-coral); }
+
+  /* ========== NAV ========== */
+  nav { display: flex; align-items: center; gap: 0.25rem; }
+  nav a {
+    text-decoration: none; font-size: 0.88rem; font-weight: 700;
+    color: var(--text-mid); padding: 8px 16px; border-radius: var(--radius-sm);
+    transition: all 0.25s;
+    position: relative;
+  }
+  nav a:hover {
+    color: var(--blue-deep);
+    background: var(--blue-mist);
+  }
+  nav a.active {
+    color: white;
+    background: linear-gradient(135deg,var(--blue-mid),var(--blue-deep));
+    box-shadow: 0 4px 14px rgba(74,144,217,0.35);
+  }
+
+  .nav-cta {
+    background: linear-gradient(135deg,var(--accent-coral),#ff6b5b) !important;
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(255,140,120,0.40) !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,140,120,0.50) !important; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    padding: 8px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2.5px;
+    background: var(--blue-deep); border-radius: 99px; transition: 0.3s;
+  }
+
+  /* ========== HERO ========== */
+  #beranda {
+    max-width: 1200px; margin: 0 auto;
+    padding: 80px 2rem 60px;
+    display: flex; align-items: center; justify-content: space-between; gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-text { flex: 1; min-width: 280px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-pale); color: var(--blue-deep);
+    padding: 6px 16px; border-radius: 99px;
+    font-size: 0.8rem; font-weight: 800;
+    margin-bottom: 20px; letter-spacing: 0.5px;
+    border: 1.5px solid rgba(122,186,240,0.5);
+  }
+  .hero-badge::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-mint); display: inline-block;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.5; transform:scale(1.3); }
+  }
+
+  .hero-title {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    color: var(--text-dark); line-height: 1.2; margin-bottom: 16px;
+  }
+  .hero-title em { color: var(--blue-mid); font-style: normal; }
+
+  .hero-desc {
+    font-size: 1.05rem; color: var(--text-mid);
+    line-height: 1.8; margin-bottom: 32px; max-width: 480px;
+  }
+
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg,var(--blue-mid),var(--blue-deep));
+    color: white; padding: 14px 28px; border-radius: var(--radius-md);
+    font-weight: 800; font-size: 0.95rem; text-decoration: none; border: none;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 6px 22px rgba(37,99,168,0.30);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(37,99,168,0.40); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--blue-deep);
+    padding: 14px 28px; border-radius: var(--radius-md);
+    font-weight: 800; font-size: 0.95rem; text-decoration: none; border: none;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 4px 18px rgba(37,99,168,0.12);
+    border: 2px solid var(--blue-pale);
+  }
+  .btn-secondary:hover { transform: translateY(-2px); border-color: var(--blue-soft); }
+
+  .hero-visual {
+    flex: 1; min-width: 280px; max-width: 480px;
+    position: relative;
+  }
+
+  .hero-card {
+    background: white; border-radius: var(--radius-xl);
+    padding: 36px; box-shadow: var(--shadow-lg);
+    border: 2px solid var(--blue-pale);
+    position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg,var(--blue-mist) 0%, white 60%);
+    z-index: 0;
+  }
+  .hero-card-inner { position: relative; z-index: 1; }
+  .hero-pill-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .pill {
+    padding: 6px 16px; border-radius: 99px;
+    font-size: 0.8rem; font-weight: 800;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .pill-blue { background: var(--blue-pale); color: var(--blue-deep); }
+  .pill-mint { background: #d0f5ef; color: #1a8a7a; }
+  .pill-coral { background: #ffe0da; color: #c44a38; }
+  .pill-lemon { background: #fff3cc; color: #8a7020; }
+  .pill-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.6;
+  }
+
+  .stat-row {
+    display: flex; gap: 16px; margin-top: 20px;
+  }
+  .stat-box {
+    flex: 1; background: white; border-radius: var(--radius-md);
+    padding: 16px; text-align: center;
+    border: 1.5px solid var(--blue-pale);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-num {
+    font-family: 'Pacifico', cursive; font-size: 1.6rem; color: var(--blue-deep);
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--text-light); font-weight: 700; }
+
+  .float-badge {
+    position: absolute;
+    background: white; border-radius: var(--radius-md); padding: 10px 16px;
+    box-shadow: var(--shadow-md); border: 1.5px solid var(--blue-pale);
+    font-size: 0.78rem; font-weight: 800; color: var(--text-dark);
+    display: flex; align-items: center; gap: 8px;
+    animation: floatY 3s ease-in-out infinite alternate;
+    white-space: nowrap;
+  }
+  .float-badge-1 { top: -18px; right: 30px; }
+  .float-badge-2 { bottom: -18px; left: 30px; animation-delay: 1.5s; }
+  .fb-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  @keyframes floatY {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+  }
+
+  /* ========== SECTION COMMON ========== */
+  .section-wrap { max-width: 1200px; margin: 0 auto; padding: 70px 2rem; }
+
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-chip {
+    display: inline-block; background: var(--blue-pale);
+    color: var(--blue-deep); padding: 5px 18px; border-radius: 99px;
+    font-size: 0.78rem; font-weight: 800; margin-bottom: 14px;
+    border: 1.5px solid var(--blue-soft);
+    letter-spacing: 0.5px;
+  }
+  .section-title {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem); color: var(--text-dark);
+    margin-bottom: 12px;
+  }
+  .section-title em { color: var(--blue-mid); font-style: normal; }
+  .section-sub { color: var(--text-mid); font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+  /* ========== LAYANAN SECTION ========== */
+  #layanan { background: var(--blue-mist); }
+
+  .layanan-grid {
+    display: flex; flex-wrap: wrap; gap: 22px;
+    justify-content: center;
+  }
+
+  .layanan-card {
+    flex: 1 1 220px; max-width: 260px;
+    background: white; border-radius: var(--radius-lg); padding: 30px 24px;
+    box-shadow: var(--shadow-sm);
+    border: 2px solid transparent;
+    transition: all 0.3s; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .layanan-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    border-radius: 99px 99px 0 0;
+    background: linear-gradient(90deg,var(--blue-mid),var(--blue-soft));
+  }
+  .layanan-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--blue-pale);
+    box-shadow: var(--shadow-md);
+  }
+  .layanan-icon-wrap {
+    width: 64px; height: 64px; border-radius: 20px; margin: 0 auto 18px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+  }
+  .ic-blue  { background: var(--blue-pale); }
+  .ic-mint  { background: #d0f5ef; }
+  .ic-coral { background: #ffe0da; }
+  .ic-lemon { background: #fff3cc; }
+  .layanan-card h3 { font-size: 1rem; font-weight: 900; color: var(--text-dark); margin-bottom: 8px; }
+  .layanan-card p  { font-size: 0.83rem; color: var(--text-light); line-height: 1.6; }
+
+  /* ========== PRODUK SECTION ========== */
+  .produk-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .produk-bar h2 { font-family: 'Pacifico', cursive; font-size: 1.5rem; color: var(--text-dark); }
+  .btn-add-produk {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg,var(--accent-mint),#3ab5a0);
+    color: white; border: none; padding: 10px 22px; border-radius: var(--radius-sm);
+    font-weight: 800; font-size: 0.88rem; cursor: pointer; transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(109,214,194,0.35);
+  }
+  .btn-add-produk:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(109,214,194,0.45); }
+
+  .produk-grid {
+    display: flex; flex-wrap: wrap; gap: 20px;
+  }
+
+  .produk-card {
+    flex: 1 1 240px; max-width: 280px;
+    background: white; border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-sm); border: 2px solid var(--blue-pale);
+    transition: all 0.3s; position: relative;
+    animation: cardIn 0.4s ease both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(20px) scale(0.96); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .produk-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--blue-soft); }
+
+  .produk-img {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; position: relative;
+  }
+  .produk-img-label {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--blue-deep); color: white;
+    font-size: 0.68rem; font-weight: 800; padding: 3px 10px; border-radius: 99px;
+  }
+  .produk-body { padding: 18px; }
+  .produk-name { font-weight: 900; font-size: 0.97rem; color: var(--text-dark); margin-bottom: 4px; }
+  .produk-desc { font-size: 0.78rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.5; }
+  .produk-footer-row { display: flex; align-items: center; justify-content: space-between; }
+  .produk-price { font-family: 'Pacifico', cursive; font-size: 1.1rem; color: var(--blue-deep); }
+  .btn-hapus {
+    background: #ffe0da; color: #c44a38; border: none;
+    padding: 6px 14px; border-radius: var(--radius-sm);
+    font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.2s;
+  }
+  .btn-hapus:hover { background: #ff8c78; color: white; transform: scale(1.05); }
+
+  .produk-empty {
+    width: 100%; text-align: center; padding: 40px 20px;
+    color: var(--text-light); font-weight: 700; font-size: 0.95rem;
+  }
+
+  /* ========== FORM SECTION ========== */
+  #pesan { background: var(--cream-warm); }
+
+  .form-card {
+    background: white; border-radius: var(--radius-xl); padding: 50px 44px;
+    max-width: 680px; margin: 0 auto;
+    box-shadow: var(--shadow-lg); border: 2px solid var(--cream-border);
+    position: relative; overflow: hidden;
+  }
+  .form-card::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: linear-gradient(135deg,var(--blue-pale),var(--blue-mist));
+    z-index: 0;
+  }
+  .form-card-inner { position: relative; z-index: 1; }
+
+  .form-title {
+    font-family: 'Pacifico', cursive; font-size: 1.7rem; color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+  .form-title em { color: var(--blue-mid); font-style: normal; }
+  .form-sub { font-size: 0.88rem; color: var(--text-light); margin-bottom: 32px; }
+
+  .form-row { display: flex; gap: 18px; flex-wrap: wrap; }
+  .form-group {
+    display: flex; flex-direction: column; gap: 7px; flex: 1; min-width: 200px;
+    margin-bottom: 20px;
+  }
+  .form-group.full { flex: 1 1 100%; }
+
+  label { font-size: 0.83rem; font-weight: 800; color: var(--text-mid); }
+  label span { color: var(--accent-coral); }
+
+  .form-input {
+    padding: 12px 16px; border-radius: var(--radius-sm);
+    border: 2px solid var(--blue-pale);
+    background: var(--blue-mist);
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem; color: var(--text-dark);
+    outline: none; transition: all 0.25s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .form-input:focus {
+    border-color: var(--blue-mid);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(74,144,217,0.12);
+  }
+  .form-input.invalid { border-color: var(--accent-coral); background: #fff5f3; }
+  .form-input.valid   { border-color: var(--accent-mint); }
+
+  .radio-group, .check-group {
+    display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px;
+  }
+  .radio-item, .check-item {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-size: 0.88rem; font-weight: 700; color: var(--text-mid);
+  }
+  .radio-item input, .check-item input { accent-color: var(--blue-mid); }
+
+  .err-msg {
+    font-size: 0.75rem; color: var(--accent-coral); font-weight: 800;
+    display: none; margin-top: -14px; margin-bottom: 4px;
+  }
+  .err-msg.show { display: block; animation: shake 0.3s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-4px); }
+    75%      { transform: translateX(4px); }
+  }
+
+  .btn-submit {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg,var(--blue-mid),var(--blue-deep));
+    color: white; border: none; border-radius: var(--radius-md);
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900;
+    cursor: pointer; transition: all 0.3s; letter-spacing: 0.3px;
+    box-shadow: 0 6px 22px rgba(37,99,168,0.30);
+    margin-top: 8px;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(37,99,168,0.40); }
+  .btn-submit:active { transform: translateY(0); }
+
+  .success-banner {
+    display: none; background: linear-gradient(135deg,#d0f5ef,#c0f0e0);
+    border: 2px solid var(--accent-mint); border-radius: var(--radius-md);
+    padding: 16px 20px; text-align: center;
+    font-weight: 800; color: #1a7a6a; font-size: 0.95rem; margin-top: 16px;
+  }
+  .success-banner.show { display: block; animation: slideDown 0.4s ease; }
+  @keyframes slideDown {
+    from { opacity:0; transform:translateY(-10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,30,60,0.45); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .modal-box {
+    background: white; border-radius: var(--radius-xl); padding: 40px 36px;
+    width: 100%; max-width: 480px; position: relative;
+    box-shadow: 0 24px 64px rgba(37,99,168,0.25);
+    border: 2px solid var(--blue-pale);
+    animation: modalPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes modalPop {
+    from { opacity:0; transform:scale(0.85) translateY(20px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: var(--blue-pale); color: var(--blue-deep);
+    font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-weight: 900; transition: 0.2s;
+  }
+  .modal-close:hover { background: var(--accent-coral); color: white; }
+
+  .modal-title { font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--text-dark); margin-bottom: 20px; }
+  .modal-grid { display: flex; flex-direction: column; gap: 16px; }
+  .modal-input {
+    padding: 11px 16px; border-radius: var(--radius-sm);
+    border: 2px solid var(--blue-pale); background: var(--blue-mist);
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem; color: var(--text-dark);
+    outline: none; transition: 0.25s; width: 100%;
+  }
+  .modal-input:focus { border-color: var(--blue-mid); background: white; }
+  .modal-colors {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .color-opt {
+    width: 32px; height: 32px; border-radius: 10px; cursor: pointer;
+    border: 3px solid transparent; transition: 0.2s;
+  }
+  .color-opt.chosen { border-color: var(--blue-deep); transform: scale(1.15); }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--blue-deep);
+    color: white;
+    text-align: center;
+    padding: 28px 2rem;
+  }
+  .footer-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Pacifico', cursive; font-size: 1.3rem; color: white;
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent-lemon); }
+
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-links a {
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 0.83rem; font-weight: 700; transition: 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent-lemon); }
+
+  .footer-copy {
+    width: 100%; text-align: center;
+    color: rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 700;
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    nav { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0;
+          background: white; border-bottom: 2px solid var(--blue-pale);
+          padding: 16px; gap: 6px; box-shadow: var(--shadow-md); }
+    nav.open { display: flex; }
+    nav a { width: 100%; text-align: center; }
+    .hamburger { display: flex; }
+
+    #beranda { flex-direction: column; padding: 50px 1.5rem 40px; }
+    .hero-visual { max-width: 100%; }
+    .stat-row { gap: 10px; }
+
+    .layanan-card { max-width: 100%; }
+
+    .produk-card { flex: 1 1 100%; max-width: 100%; }
+
+    .form-card { padding: 32px 22px; }
+    .form-row { flex-direction: column; gap: 0; }
+
+    .modal-box { padding: 28px 22px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-btns { flex-direction: column; }
+    .btn-primary, .btn-secondary { justify-content: center; }
+    .stat-row { flex-direction: column; }
+    .footer-inner { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+   .hero-title {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  #beranda {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-text {
+    width: 100%;
+  }
+  }
+</style>
+</head>
+<body>
+
+<!-- BG BLOBS -->
+<div class="blob-bg" aria-hidden="true">
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- ============== HEADER ============== -->
+<header>
+  <div class="header-inner">
+    <a href="#beranda" class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">Bio<span>Health</span></span>
+    </a>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav">
+      <a href="#beranda" class="active">Beranda</a>
+      <a href="#layanan">Layanan</a>
+      <a href="#produk">Produk</a>
+      <a href="#pesan" class="nav-cta">Pesan Obat</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============== HERO / BERANDA ============== -->
+<main>
+<section id="beranda" aria-label="Beranda">
+  <div class="hero-text">
+    <div class="hero-badge">Apotek Terpercaya No.1</div>
+    <h1 class="hero-title">Obat <em>Sampai</em><br/>di Depan<br/>Pintu Kamu!</h1>
+    <p class="hero-desc">
+      BioHealth menghadirkan layanan apotek online yang cepat, aman, dan menyenangkan. 
+      Pesan obatmu kapan saja, di mana saja!
+    </p>
+    <div class="hero-btns">
+      <a href="#pesan" class="btn-primary">Pesan Sekarang</a>
+      <a href="#produk" class="btn-secondary">Lihat Produk</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="float-badge float-badge-1">
+      <span class="fb-dot" style="background:var(--accent-mint);"></span>
+      Pengiriman 2 Jam
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-inner">
+        <div class="hero-pill-row">
+          <span class="pill pill-blue"><span class="pill-dot"></span> Paracetamol</span>
+          <span class="pill pill-mint"><span class="pill-dot"></span> Vitamin C</span>
+          <span class="pill pill-coral"><span class="pill-dot"></span> Amoxicillin</span>
+          <span class="pill pill-lemon"><span class="pill-dot"></span> Antasida</span>
+          <span class="pill pill-blue"><span class="pill-dot"></span> Ibuprofen</span>
+        </div>
+        <div style="background:var(--blue-mist);border-radius:var(--radius-md);padding:20px;text-align:center;margin-bottom:18px;">
+          <div style="font-size:4rem;line-height:1;margin-bottom:8px;">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="72" height="72" rx="20" fill="#C8E2FA"/>
+              <rect x="30" y="12" width="12" height="48" rx="6" fill="#4A90D9"/>
+              <rect x="12" y="30" width="48" height="12" rx="6" fill="#2563A8"/>
+              <circle cx="36" cy="36" r="8" fill="white"/>
+            </svg>
+          </div>
+          <div style="font-weight:900;color:var(--text-dark);font-size:0.95rem;">Apotek Digital</div>
+          <div style="font-size:0.78rem;color:var(--text-light);margin-top:4px;">Tersedia 500+ Produk</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">12K+</div>
+            <div class="stat-label">Pelanggan</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Produk</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">4.9</div>
+            <div class="stat-label">Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="float-badge float-badge-2">
+      <span class="fb-dot" style="background:var(--accent-coral);"></span>
+      100% Produk Asli
+    </div>
+  </div>
+</section>
+
+<!-- ============== LAYANAN ============== -->
+<section id="layanan" aria-label="Layanan Kami">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-chip">Layanan Kami</div>
+      <h2 class="section-title">Kenapa Pilih <em>BioHealth?</em></h2>
+      <p class="section-sub">Kami hadir untuk memudahkan kebutuhan kesehatanmu dengan layanan terbaik dan terpercaya.</p>
+    </div>
+    <div class="layanan-grid">
+      <article class="layanan-card">
+        <div class="layanan-icon-wrap ic-blue">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="11" y="3" width="6" height="22" rx="3" fill="#2563A8"/><rect x="3" y="11" width="22" height="6" rx="3" fill="#4A90D9"/></svg>
+        </div>
+        <h3>Obat Resep & Non-Resep</h3>
+        <p>Kami menyediakan obat resep dokter dan obat bebas dengan jaminan keaslian produk.</p>
+      </article>
+      <article class="layanan-card">
+        <div class="layanan-icon-wrap ic-mint">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="#3ab5a0" stroke-width="2.5"/><path d="M10 14l3 3 5-5" stroke="#3ab5a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Konsultasi Apoteker</h3>
+        <p>Chat langsung dengan apoteker kami yang berpengalaman kapan pun kamu butuhkan.</p>
+      </article>
+      <article class="layanan-card">
+        <div class="layanan-icon-wrap ic-coral">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="8" width="20" height="16" rx="3" fill="none" stroke="#c44a38" stroke-width="2.5"/><path d="M8 8V6a6 6 0 0 1 12 0v2" stroke="#c44a38" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Pengiriman Cepat</h3>
+        <p>Obat dikirim dalam 2 jam ke seluruh area kota dengan packaging yang aman dan rapi.</p>
+      </article>
+      <article class="layanan-card">
+        <div class="layanan-icon-wrap ic-lemon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3l2.8 8.5H25l-7.2 5.2 2.8 8.5L14 20l-6.6 5.2 2.8-8.5L3 11.5h8.2z" fill="none" stroke="#8a7020" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Program Loyalitas</h3>
+        <p>Kumpulkan poin setiap pembelian dan tukarkan dengan diskon menarik untuk orderan berikutnya.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRODUK (DOM Dinamis) ============== -->
+<section id="produk" aria-label="Katalog Produk">
+  <div class="section-wrap">
+    <div class="produk-bar">
+      <div>
+        <div class="section-chip" style="text-align:left;margin-bottom:6px;">Katalog</div>
+        <h2 style="font-family:'Pacifico',cursive;font-size:1.6rem;color:var(--text-dark);">Produk <em style="color:var(--blue-mid);font-style:normal;">Terlaris</em></h2>
+      </div>
+      <button class="btn-add-produk" id="btnBukaTambah">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Tambah Produk
+      </button>
+    </div>
+    <div class="produk-grid" id="produkGrid"></div>
+  </div>
+</section>
+
+<!-- ============== FORM PEMESANAN ============== -->
+<section id="pesan" aria-label="Formulir Pemesanan">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-chip">Pemesanan</div>
+      <h2 class="section-title">Formulir <em>Pesan Obat</em></h2>
+      <p class="section-sub">Isi formulir berikut dengan lengkap dan benar, lalu kami siapkan pesananmu!</p>
+    </div>
+    <div class="form-card">
+      <div class="form-card-inner">
+        <h3 class="form-title">Ayo <em>Pesan</em> Sekarang</h3>
+        <p class="form-sub">Semua field wajib * diisi dengan benar.</p>
+        <form id="formPesan" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fNama">Nama Lengkap <span>*</span></label>
+              <input class="form-input" type="text" id="fNama" placeholder="cth. Budi Santoso" autocomplete="name"/>
+              <span class="err-msg" id="errNama">Nama tidak boleh kosong.</span>
+            </div>
+            <div class="form-group">
+              <label for="fEmail">Email <span>*</span></label>
+              <input class="form-input" type="email" id="fEmail" placeholder="kamu@email.com" autocomplete="email"/>
+              <span class="err-msg" id="errEmail">Masukkan email yang valid.</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fTelp">No. Telepon <span>*</span></label>
+              <input class="form-input" type="tel" id="fTelp" placeholder="0812xxxxxxxx" maxlength="15"/>
+              <span class="err-msg" id="errTelp">Masukkan nomor valid (min 10 digit, positif).</span>
+            </div>
+            <div class="form-group">
+              <label for="fJumlah">Jumlah Produk <span>*</span></label>
+              <input class="form-input" type="number" id="fJumlah" placeholder="Misal: 2" min="1" max="99"/>
+              <span class="err-msg" id="errJumlah">Jumlah harus angka positif (min 1).</span>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label for="fProduk">Pilih Produk <span>*</span></label>
+            <select class="form-input" id="fProduk">
+              <option value="">-- Pilih Produk --</option>
+              <option value="paracetamol">Paracetamol 500mg</option>
+              <option value="vitaminc">Vitamin C 1000mg</option>
+              <option value="amoxicillin">Amoxicillin 500mg</option>
+              <option value="antasida">Antasida Tablet</option>
+              <option value="ibuprofen">Ibuprofen 400mg</option>
+            </select>
+            <span class="err-msg" id="errProduk">Pilih salah satu produk.</span>
+          </div>
+          <div class="form-group full">
+            <label>Metode Pengiriman <span>*</span></label>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="pengiriman" value="reguler"/> Reguler (1-2 Hari)
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="pengiriman" value="express"/> Express (2 Jam)
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="pengiriman" value="ambil"/> Ambil Sendiri
+              </label>
+            </div>
+            <span class="err-msg" id="errPengiriman">Pilih metode pengiriman.</span>
+          </div>
+          <div class="form-group full">
+            <label for="fAlamat">Alamat Lengkap <span>*</span></label>
+            <textarea class="form-input" id="fAlamat" rows="3" placeholder="Jl. Contoh No. 10, Kota..."></textarea>
+            <span class="err-msg" id="errAlamat">Alamat tidak boleh kosong.</span>
+          </div>
+          <div class="form-group full">
+            <label class="check-item">
+              <input type="checkbox" id="fSetuju"/>
+              Saya setuju dengan syarat dan ketentuan BioHealth <span style="color:var(--accent-coral);">*</span>
+            </label>
+            <span class="err-msg" id="errSetuju">Anda harus menyetujui syarat dan ketentuan.</span>
+          </div>
+          <button type="submit" class="btn-submit">Kirim Pesanan Sekarang</button>
+          <div class="success-banner" id="successBanner">
+            Pesanan berhasil dikirim! Tim BioHealth akan menghubungi kamu segera.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Bio<span>Health</span></span>
+    <nav class="footer-links" aria-label="Footer Navigation">
+      <a href="#beranda">Beranda</a>
+      <a href="#layanan">Layanan</a>
+      <a href="#produk">Produk</a>
+      <a href="#pesan">Pesan</a>
+    </nav>
+    <div class="footer-copy">
+      &copy; 2026 BioHealth Apotek Online. Dibuat oleh Dinda Maulidya untuk Ujian Pratikum.
+    </div>
+  </div>
+</footer>
+
+<!-- ============== MODAL TAMBAH PRODUK ============== -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Tambah Produk">
+  <div class="modal-box">
+    <button class="modal-close" id="btnTutupModal" aria-label="Tutup">&times;</button>
+    <h3 class="modal-title">Tambah Produk Baru</h3>
+    <div class="modal-grid">
+      <input class="modal-input" type="text" id="mNama" placeholder="Nama Produk (cth: Vitamin D3)"/>
+      <input class="modal-input" type="text" id="mDeskripsi" placeholder="Deskripsi singkat produk"/>
+      <input class="modal-input" type="number" id="mHarga" placeholder="Harga (cth: 25000)" min="1"/>
+      <div>
+        <div style="font-size:0.8rem;font-weight:800;color:var(--text-mid);margin-bottom:10px;">Warna Kartu</div>
+        <div class="modal-colors" id="colorPicker">
+          <div class="color-opt chosen" data-color="#c8e2fa" style="background:#c8e2fa;"></div>
+          <div class="color-opt" data-color="#d0f5ef" style="background:#d0f5ef;"></div>
+          <div class="color-opt" data-color="#ffe0da" style="background:#ffe0da;"></div>
+          <div class="color-opt" data-color="#fff3cc" style="background:#fff3cc;"></div>
+          <div class="color-opt" data-color="#e8d8ff" style="background:#e8d8ff;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:800;color:var(--text-mid);margin-bottom:6px;">Label Kategori</div>
+        <input class="modal-input" type="text" id="mLabel" placeholder="cth: Vitamin, Antibiotik..." style="margin-top:0;"/>
+      </div>
+      <span id="mErr" style="color:var(--accent-coral);font-size:0.78rem;font-weight:800;display:none;">Lengkapi semua field dengan benar.</span>
+      <button class="btn-primary" id="btnSimpanProduk" style="justify-content:center;width:100%;">Simpan Produk</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================== DATA AWAL ==================== */
+const ICONS = [
+  '<svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="16" fill="#C8E2FA"/><rect x="21" y="8" width="10" height="36" rx="5" fill="#4A90D9"/><rect x="8" y="21" width="36" height="10" rx="5" fill="#2563A8"/></svg>',
+  '<svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="16" fill="#D0F5EF"/><circle cx="26" cy="26" r="14" fill="none" stroke="#3AB5A0" stroke-width="3"/><path d="M20 26l5 5 8-9" stroke="#3AB5A0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  '<svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="16" fill="#FFE0DA"/><ellipse cx="26" cy="26" rx="14" ry="10" fill="none" stroke="#C44A38" stroke-width="3"/><circle cx="26" cy="26" r="5" fill="#C44A38"/></svg>',
+  '<svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="16" fill="#FFF3CC"/><path d="M26 10l4.2 13H53l-11 8 4.2 13L26 36l-10.4 8 4.2-13-11-8h15.8z" fill="#8A7020"/></svg>',
+  '<svg width="52" height="52" viewBox="0 0 52 52" fill="none"><rect width="52" height="52" rx="16" fill="#E8D8FF"/><rect x="14" y="14" width="24" height="24" rx="6" fill="#7B4AE8"/><rect x="20" y="20" width="12" height="12" rx="3" fill="white"/></svg>',
+];
+
+let produkData = [
+  { id: 1, nama: "Paracetamol 500mg", deskripsi: "Pereda nyeri dan demam yang efektif", harga: 8500, label: "Analgesik", warna: "#c8e2fa", icon: 0 },
+  { id: 2, nama: "Vitamin C 1000mg", deskripsi: "Meningkatkan imunitas tubuhmu setiap hari", harga: 15000, label: "Vitamin", warna: "#d0f5ef", icon: 1 },
+  { id: 3, nama: "Amoxicillin 500mg", deskripsi: "Antibiotik untuk infeksi bakteri, resep dokter", harga: 22000, label: "Antibiotik", warna: "#ffe0da", icon: 2 },
+  { id: 4, nama: "Antasida Tablet", deskripsi: "Meredakan asam lambung dan maag dengan cepat", harga: 12000, label: "Lambung", warna: "#fff3cc", icon: 3 },
+  { id: 5, nama: "Vitamin D3 1000IU", deskripsi: "Mendukung kesehatan tulang dan sistem imun", harga: 35000, label: "Vitamin", warna: "#e8d8ff", icon: 4 },
+];
+let nextId = 6;
+
+function formatRupiah(angka) {
+  return 'Rp ' + angka.toLocaleString('id-ID');
+}
+
+function renderKatalog() {
+  const grid = document.getElementById('produkGrid');
+  if (produkData.length === 0) {
+    grid.innerHTML = '<div class="produk-empty">Belum ada produk. Tambahkan produk baru!</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  produkData.forEach(function(p, idx) {
+    const card = document.createElement('article');
+    card.className = 'produk-card';
+    card.style.animationDelay = (idx * 0.06) + 's';
+    card.innerHTML = `
+      <div class="produk-img" style="background:${p.warna};">
+        <span class="produk-img-label">${p.label}</span>
+        ${ICONS[p.icon % ICONS.length]}
+      </div>
+      <div class="produk-body">
+        <div class="produk-name">${p.nama}</div>
+        <div class="produk-desc">${p.deskripsi}</div>
+        <div class="produk-footer-row">
+          <span class="produk-price">${formatRupiah(p.harga)}</span>
+          <button class="btn-hapus" data-id="${p.id}">Hapus</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.btn-hapus').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const id = parseInt(this.dataset.id);
+      produkData = produkData.filter(function(x) { return x.id !== id; });
+      renderKatalog();
+    });
+  });
+}
+
+/* ========== MODAL ========== */
+let selectedColor = '#c8e2fa';
+
+document.getElementById('btnBukaTambah').addEventListener('click', function() {
+  document.getElementById('modalOverlay').classList.add('open');
+});
+document.getElementById('btnTutupModal').addEventListener('click', tutupModal);
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) tutupModal();
+});
+function tutupModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('mNama').value = '';
+  document.getElementById('mDeskripsi').value = '';
+  document.getElementById('mHarga').value = '';
+  document.getElementById('mLabel').value = '';
+  document.getElementById('mErr').style.display = 'none';
+}
+
+document.querySelectorAll('.color-opt').forEach(function(el) {
+  el.addEventListener('click', function() {
+    document.querySelectorAll('.color-opt').forEach(function(x) { x.classList.remove('chosen'); });
+    this.classList.add('chosen');
+    selectedColor = this.dataset.color;
+  });
+});
+
+document.getElementById('btnSimpanProduk').addEventListener('click', function() {
+  const nama = document.getElementById('mNama').value.trim();
+  const desk = document.getElementById('mDeskripsi').value.trim();
+  const harga = parseInt(document.getElementById('mHarga').value);
+  const label = document.getElementById('mLabel').value.trim();
+  const errEl = document.getElementById('mErr');
+
+  if (!nama || !desk || isNaN(harga) || harga <= 0 || !label) {
+    errEl.style.display = 'block'; return;
+  }
+  errEl.style.display = 'none';
+
+  const iconMap = { '#c8e2fa': 0, '#d0f5ef': 1, '#ffe0da': 2, '#fff3cc': 3, '#e8d8ff': 4 };
+  produkData.push({
+    id: nextId++, nama: nama, deskripsi: desk, harga: harga,
+    label: label, warna: selectedColor,
+    icon: iconMap[selectedColor] !== undefined ? iconMap[selectedColor] : 0
+  });
+  renderKatalog();
+  tutupModal();
+
+  const produkSec = document.getElementById('produk');
+  produkSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ========== VALIDASI FORM ========== */
+function setErr(id, errId, show) {
+  const inp = document.getElementById(id);
+  const err = document.getElementById(errId);
+  if (inp) { inp.classList.toggle('invalid', show); inp.classList.toggle('valid', !show); }
+  if (err) { err.classList.toggle('show', show); }
+  return show;
+}
+
+document.getElementById('formPesan').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let hasErr = false;
+
+  const nama = document.getElementById('fNama').value.trim();
+  if (setErr('fNama', 'errNama', !nama)) hasErr = true;
+
+  const email = document.getElementById('fEmail').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (setErr('fEmail', 'errEmail', !emailOk)) hasErr = true;
+
+  const telp = document.getElementById('fTelp').value.trim();
+  const telpOk = /^\d{10,15}$/.test(telp);
+  if (setErr('fTelp', 'errTelp', !telpOk)) hasErr = true;
+
+  const jumlah = parseInt(document.getElementById('fJumlah').value);
+  if (setErr('fJumlah', 'errJumlah', isNaN(jumlah) || jumlah < 1)) hasErr = true;
+
+  const produk = document.getElementById('fProduk').value;
+  if (setErr('fProduk', 'errProduk', !produk)) hasErr = true;
+
+  const pengiriman = document.querySelector('input[name="pengiriman"]:checked');
+  const errPengEl = document.getElementById('errPengiriman');
+  if (!pengiriman) { errPengEl.classList.add('show'); hasErr = true; }
+  else errPengEl.classList.remove('show');
+
+  const alamat = document.getElementById('fAlamat').value.trim();
+  if (setErr('fAlamat', 'errAlamat', !alamat)) hasErr = true;
+
+  const setuju = document.getElementById('fSetuju').checked;
+  const errSetEl = document.getElementById('errSetuju');
+  if (!setuju) { errSetEl.classList.add('show'); hasErr = true; }
+  else errSetEl.classList.remove('show');
+
+  if (!hasErr) {
+    document.getElementById('successBanner').classList.add('show');
+    this.reset();
+    document.querySelectorAll('.form-input').forEach(function(i) {
+      i.classList.remove('valid','invalid');
+    });
+    document.querySelectorAll('.err-msg').forEach(function(e) { e.classList.remove('show'); });
+    setTimeout(function() {
+      document.getElementById('successBanner').classList.remove('show');
+    }, 5000);
+  }
+});
+
+document.querySelectorAll('.form-input').forEach(function(inp) {
+  inp.addEventListener('input', function() {
+    this.classList.remove('invalid');
+  });
+});
+
+/* ========== HAMBURGER ========== */
+document.getElementById('hamburgerBtn').addEventListener('click', function() {
+  document.getElementById('mainNav').classList.toggle('open');
+});
+
+/* ========== NAV ACTIVE ========== */
+const navLinks = document.querySelectorAll('header nav a:not(.nav-cta)');
+const sections = ['beranda','layanan','produk','pesan'];
+
+window.addEventListener('scroll', function() {
+  let current = '';
+  sections.forEach(function(id) {
+    const sec = document.getElementById(id);
+    if (sec && window.scrollY >= sec.offsetTop - 120) current = id;
+  });
+  navLinks.forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+/* ========== INIT ========== */
+renderKatalog();
+</script>
+</body>
+</html>
